@@ -4,12 +4,18 @@ const main = document.querySelector('main');
 let htmlString = "";
 */
 
-var data = require("/assets/jokesbase.json")
+/*
+fetch('https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokesbase.json')
+   .then(response => response.text())
+   .then(json => console.log(JSON.stringify(json)))
+*/
+
+const data = printJSON();
 console.log(data);
 
 
 async function printJSON() {
-    const response = await fetch("/assets/jokebase.json");
+    const response = await fetch("https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokesbase.json");
     const json = await response.json();
     console.log(json);
 
