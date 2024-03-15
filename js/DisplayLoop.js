@@ -10,9 +10,18 @@ fetch('https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokes
    .then(json => console.log(JSON.stringify(json)))
 */
 
+/*
 const data = printJSON();
 console.log(data);
+*/
 
+showmodal1();
+
+async function showmodal1() {
+    const data = await 
+                 fetch('https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokesbase.json');
+    console.log(data)
+}
 
 async function printJSON() {
     const response = await fetch("https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokesbase.json");
