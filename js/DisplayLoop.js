@@ -11,13 +11,11 @@ fetch('https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokes
 */
 
 const data = printJSON();
-console.log(data);
 
 async function printJSON() {
     const response = await fetch("https://github.com/darkasfuck/darkasfuck.github.io/blob/main/assets/jokesbase.json");
     const json = await response.json();
     console.log(json);
-
     return (json);
 }
 
