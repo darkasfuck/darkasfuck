@@ -3,9 +3,7 @@ const main = document.querySelector('main');
 
 let Ljokes = [];
 fetch('https://raw.githubusercontent.com/darkasfuck/darkasfuck.github.io/main/assets/jokesbase.json')
-    .then((value)=> {
-        return value.json()
-    })
+    .then((value)=> {return value.json()})
     .then(
         (value) =>{
             Ljokes = value
