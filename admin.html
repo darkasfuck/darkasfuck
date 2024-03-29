@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>אתר בדיחות</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/smile.jpg" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="index.html">ראשי</a></li>
+                        <li class="nav-item"><a class="nav-link" href="randomjoke.html">רנדומלי</a></li>
+                        <li class="nav-item"><a class="nav-link" href="addjoke.html">הוסף בדיחה</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page"href="admin.html">מנהל</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+      <script>
+         var password = "1";
+         (function passcodeprotect() {
+            var passcode = prompt("Enter PassCode");
+            if (passcode !== password) {
+               alert("Incorrect PassCode");
+               window.location.href = "index.html";
+            }
+         }());
+
+      </script>
+
+        <div class="Jinfo">
+            <div class="container">
+                <div class="row">
+                    <div class="my-5">
+                        <h2 class="fw-normal">חפש בדיחה</h2> 
+                        <input style="height:20px;font-size:14pt;width:500px;" placeholder="חפש בדיחה לפי כותרת" type="text" id="Jtitle" name="Jtitle"><br><br>
+                        <button id = "Sbt">הגש</button>
+                        <div class="card mb-4">
+                            <div class="detail">
+                                <p class="Ttitle" id ="Ttitle"></p>
+                                <p class="Tbody" id ="Tbody"></p>
+                                <p class="Tdate" id ="Tdate"></p>
+                                <p class="Trank" id ="Trank"></p>
+                                <p class="Tdis" id ="Tdis"></p>
+                            </div>
+                        </div>
+                        <button id ="Dbt" >מחק</button>
+                        <script type="module">
+                            // Import the functions you need from the SDKs you need
+                            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+                            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+                            // TODO: Add SDKs for Firebase products that you want to use
+                            // https://firebase.google.com/docs/web/setup#available-libraries
+                            // Your web app's Firebase configuration
+                            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                            const firebaseConfig = {
+                            apiKey: "AIzaSyD8f2yUfA0piABQRT1Yss6c5hhV-5ItA2Y",
+                            authDomain: "darkasfuck.firebaseapp.com",
+                            databaseURL: "https://darkasfuck-default-rtdb.europe-west1.firebasedatabase.app",
+                            projectId: "darkasfuck",
+                            storageBucket: "darkasfuck.appspot.com",
+                            messagingSenderId: "643134162854",
+                            appId: "1:643134162854:web:bf94263f60bb282f6ef167",
+                            measurementId: "G-RESVHDPV26"
+                            };
+                            // Initialize Firebase
+                            const app = initializeApp(firebaseConfig);
+                            const analytics = getAnalytics(app);
+                            import{getDatabase, set, get, update, remove, ref, child}
+                            from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js"
+                            const db = getDatabase();                
+                            let Ljokes = null
+                            let detail = document.querySelector('.detail');
+
+                            var selectedjoke = -1;
+
+                            function accesjokes() {
+                                const dbref = ref(db);
+                                get(child(dbref, "jokes"))
+                                .then((snapshot)=>{
+                                    Ljokes = snapshot.val();
+                                    placejoke(Ljokes);
+                                })
+                                .catch((error)=>{
+                                    alert("לא עובד אחי סליחה")
+                                })
+                            }
+
+                            function placejoke(Ljokes){
+                                var tit = document.getElementById("Jtitle").value;
+                                var found = false;
+                                if(Ljokes != null) // if has data
+                                {
+                                    Ljokes.forEach(jokes => {
+                                        if(jokes.title==tit){
+                                            detail.querySelector('.Ttitle').innerText = jokes.title;
+                                            detail.querySelector('.Tbody').innerText = jokes.body;
+                                            detail.querySelector('.Tdate').innerText = jokes.date;
+                                            detail.querySelector('.Tdis').innerText = jokes.disgus;
+                                            detail.querySelector('.Trank').innerText = jokes.ranking;
+                                            document.getElementById("Dbt").style.display = "";
+                                            selectedjoke = Ljokes.indexOf(jokes);
+                                            found = true;
+                                        }
+                                    });
+                                    if(found==false){
+                                        detail.querySelector('.Ttitle').innerText = "לא נמצא";
+                                        detail.querySelector('.Tbody').innerText = "";
+                                        detail.querySelector('.Tdate').innerText = "";
+                                        detail.querySelector('.Tdis').innerText = "";
+                                        detail.querySelector('.Trank').innerText = "";
+                                        document.getElementById("Dbt").style.display = "none";
+
+                                    }
+                                }
+                            }
+
+                            function FindSum() {
+                                let Jnum = -1;
+                                const dbref = ref(db);
+                                get(child(dbref, "prop"))
+                                .then((snapshot)=>{
+                                    if(snapshot.exists()){
+                                        Jnum = snapshot.val().num;
+                                        UpdateNum(Jnum-1)
+                                    }
+                                })
+                                .catch((error)=>{
+                                    alert("לא עובד אחי סליחה")
+                                })
+                            }
+
+                            function UpdateNum(Jnum){
+                                update(ref(db, "prop"),{
+                                    num: Jnum
+                                })
+                                .then(()=>{
+                                    alert("נמחק בהצלחה");
+                                    window.location.reload();
+                                })
+                                .catch((error)=>{
+                                    alert("לא עבד תנסה שוב");
+                                });
+                            }
+
+
+                            function RemoveData(){
+                                remove(ref(db, "jokes/"+ selectedjoke))
+                                .then(()=>{
+                                    FindSum()
+                                })
+                                .catch((error)=>{
+                                    alert("לא עבד אחי סליחה");
+                                });
+                            }
+
+
+                            document.getElementById("Dbt").style.display = "none";   
+
+                            var insertSbt = document.querySelector("#Sbt");
+                            insertSbt.addEventListener('click', accesjokes);
+                            
+                            var insertDbt = document.querySelector("#Dbt");
+                            insertDbt.addEventListener('click', RemoveData);
+
+                        </script>
+
+                    </div>    
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+   </body>
+</html>
