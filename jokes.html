@@ -168,9 +168,11 @@
 				    	const count = rating.querySelector(".post-rating-count");
         				count.textContent = Number(count.textContent) + 1;
 		    			Dbot.classList.remove("post-rating-button-selected");
-                        getrank(1);
+                        getrank(2);
         			}
-                    getrank(1);
+                    else{
+                        getrank(1);
+                    }
         			Lbot.classList.add("post-rating-button-selected");
         		});
 
@@ -185,10 +187,12 @@
 				    	const count = rating.querySelector(".post-rating-count");
         				count.textContent = (Number(count.textContent) - 1);
 		    			Lbot.classList.remove("post-rating-button-selected");
-                        getrank(-1);
+                        getrank(-2);
         			}
+                    else{
+                        getrank(-1);
+                    }
         			Dbot.classList.add("post-rating-button-selected");
-                    getrank(-1);
         		});
 
             </script>
