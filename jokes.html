@@ -134,7 +134,7 @@
         			if (Lbot.classList.contains("post-rating-button-selected")) {
         		        		return;
 		        	}
-                    let name = ThisJID + "rate=";
+                    let name = jokeid + "rate=";
                     document.cookie = name+"1"+";path=/";
         			count.textContent = Number(count.textContent) + 1;
 		        	if (Dbot.classList.contains("post-rating-button-selected")) {
@@ -149,7 +149,7 @@
         			if (Dbot.classList.contains("post-rating-button-selected")) {
         		        		return;
 		        	}
-                    let name = ThisJID + "rate=";
+                    let name = jokeid + "rate=";
                     document.cookie = name+"-1"+";path=/";
         			count.textContent = Number(count.textContent) - 1;                    
 		        	if (Lbot.classList.contains("post-rating-button-selected")) {
