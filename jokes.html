@@ -106,12 +106,27 @@
                 const Dbot = rating.querySelector(".dislike");
                 let jokeid =  new URLSearchParams(window.location.search).get('id');
 
-                alert(document.cookie);
-
-                if (document.cookie.indexOf("liked")>=1){
-                    alert(ok);
-                    if(document.cookie("liked")==1){
+                function getCookie(ThisJID) {
+                    let JID = ThisJID + "rate=";
+                    let ca = document.cookie.split(';');
+                    for(let i = 0; i < ca.length; i++) {
+                        let c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                          c = c.substring(1);
+                        }
+                        if (c.indexOf(JID) == 0) {
+                          return c.substring(JID.length, c.length);
+                        }
+                    }
+                    return "";
+                }
+                let Inrank = getCookie(jokeid);
+                if(Inrank!=""){
+                    if (Inrank==1){
                         Lbot.classList.add("post-rating-button-selected");
+                    }
+                    if(Inrank==-1){
+                        Dbot.classList.add("post-rating-button-selected");
                     }
                 }
 
@@ -119,7 +134,8 @@
         			if (Lbot.classList.contains("post-rating-button-selected")) {
         		        		return;
 		        	}
-                    document.cookie = "liked=1;path=/";
+                    let name = ThisJID + "rate=";
+                    document.cookie = name+"1"+";path=/";
         			count.textContent = Number(count.textContent) + 1;
 		        	if (Dbot.classList.contains("post-rating-button-selected")) {
 				    	const count = rating.querySelector(".post-rating-count");
@@ -133,7 +149,8 @@
         			if (Dbot.classList.contains("post-rating-button-selected")) {
         		        		return;
 		        	}
-                    document.cookie = "liked=-1;path=/";
+                    let name = ThisJID + "rate=";
+                    document.cookie = name+"-1"+";path=/";
         			count.textContent = Number(count.textContent) - 1;                    
 		        	if (Lbot.classList.contains("post-rating-button-selected")) {
 				    	const count = rating.querySelector(".post-rating-count");
