@@ -63,15 +63,15 @@
 
                 <!-- בדיחות-->
                 
-                <div class="col-lg-8">
+                <div class="col-lg-8">                      
                         <label for="order">מיין לפי:</label>
                         <select name="order" id="order">
                           <option value="new">חדש</option>
                           <option value="old">ישן</option>
-                          <option value="rating">דירוג</option>
-                          <option value="bad">זעזוע</option>
+                          <option value="Drating">דירוג יורד</option>
+                          <option value="Urating">דירוג עולה</option>
                         </select>
-                        <input type="submit" value="מיין"> </input>
+                        <button id = "btn">מיין</button>
                     
                     <main>
                         <div class="listProduct">
@@ -107,27 +107,43 @@
                 
                         let Ljokes = null
                         
-                        function accesjokes() {
+                        function accesjokes(sort) {
                             const dbref = ref(db);
                             get(child(dbref, "jokes"))
                             .then((snapshot)=>{
                                 Ljokes = snapshot.val();
-                                addDataToHTML(Ljokes);
+                                addDataToHTML(Ljokes,sort);
                             })
                             .catch((error)=>{
                                 alert("לא עובד אחי סליחה")
                             })
                         }
 
-                        function addDataToHTML(Ljokes){
+                        function addDataToHTML(Ljokes,sort){
                          // remove datas default from HTML
                         let listProductHTML = document.querySelector('.listProduct');
                         // add new datas
                         if(Ljokes != null) // if has data
                         {
-                            Ljokes.forEach(jokes => {
+                            const sortedArray = Ljokes.slice();
+
+                            if(sort=="new"){
+                                sortedArray.sort((a, b) => b.date - a.date);
+                            }
+                            if(sort == "old"){
+                                sortedArray.sort((a, b) => a.date - b.date);
+                            }
+                            else if(sort == "Urating"){
+                                sortedArray.sort((a, b) => a.ranking - b.ranking);
+                            }
+                            else if(sort == "Drating"){
+                                sortedArray.sort((a, b) => b.ranking - a.ranking);
+                            }
+
+                            sortedArray.forEach(jokes => {
+
                                 //alert(jokes.title)
-                                let newjoke = document.createElement('a');
+                                let newjoke = document.createElement("a");
                                 newjoke.href = 'jokes.html?id=' + Ljokes.indexOf(jokes);
                                 newjoke.style ="color: #000000; text-decoration: none;"
                                 newjoke.classList.add('item');
@@ -137,7 +153,6 @@
                                     <div class="card-body"> 
                                         <h2 class="card-title" >${jokes.title} </h2>
                                         <h5 class="ratingc">
-                                            <IMG SRC="assets/scale.png" alt="scale" width="130" height="30"> &emsp;&emsp;
                                             <IMG SRC="assets/like.png" alt="like" width="20" height="20">
                                             ${jokes.ranking}
                                             <IMG SRC="assets/dislike.png" alt="dislike" width="20" height="20">
@@ -153,7 +168,17 @@
                     }   
 
 
-                        accesjokes();
+                        accesjokes("new");
+
+                        var insertBtn = document.querySelector("#btn");
+                        insertBtn.addEventListener('click', Click);
+                        function Click(){
+                            var ddl = document.getElementById("order");
+                            var selectedValue = ddl.options[ddl.selectedIndex].value;
+                            let listProductHTML = document.querySelector('.listProduct');
+                            listProductHTML.innerHTML="";
+                            accesjokes(selectedValue);
+                        }
 
 
                     </script>
