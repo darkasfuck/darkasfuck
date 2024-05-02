@@ -130,6 +130,33 @@
                     }
                 }
 
+                function updaterank(num){
+                    update(ref(db, "jokes/"+ jokeid),{
+                        ranking: num
+                        })
+                            .then(()=>{
+                    })
+                    .catch((error)=>{
+                        alert("לא עבד תנסה שוב");
+                    });
+                }
+
+
+                function getrank(num) {
+                    const dbref = ref(db);
+                    get(child(dbref, "jokes"))
+                    .then((snapshot)=>{
+                        let jokeid =  new URLSearchParams(window.location.search).get('id');
+                        Ljokes = snapshot.val();
+                        let newnum = Ljokes[jokeid].ranking + num;
+                        updaterank(newnum);
+                    })
+                    .catch((error)=>{
+                        alert("לא עובד אחי")
+                    })
+                }
+
+
                 Lbot.addEventListener("click", async () => {
         			if (Lbot.classList.contains("post-rating-button-selected")) {
         		        		return;
@@ -141,7 +168,9 @@
 				    	const count = rating.querySelector(".post-rating-count");
         				count.textContent = Number(count.textContent) + 1;
 		    			Dbot.classList.remove("post-rating-button-selected");
+                        getrank(1);
         			}
+                    getrank(1);
         			Lbot.classList.add("post-rating-button-selected");
         		});
 
@@ -156,8 +185,10 @@
 				    	const count = rating.querySelector(".post-rating-count");
         				count.textContent = (Number(count.textContent) - 1);
 		    			Lbot.classList.remove("post-rating-button-selected");
+                        getrank(-1);
         			}
         			Dbot.classList.add("post-rating-button-selected");
+                    getrank(-1);
         		});
 
             </script>
