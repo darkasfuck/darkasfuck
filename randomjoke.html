@@ -30,13 +30,14 @@ from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js"
 const db = getDatabase();                
 
 function callrandomjoke(){
-    var Jnum = -1;
+    let Jnum =null;
     const dbref = ref(db);
-    get(child(dbref, "prop"))
+    get(child(dbref, "jokes"))
     .then((snapshot)=>{
         if(snapshot.exists()){
-            Jnum = snapshot.val().num;
-            checkex(Jnum);
+            Jnum = snapshot.val();
+            console.log(Jnum.length)
+            checkex(Jnum.length);
         }
     })
     .catch((error)=>{

@@ -112,40 +112,11 @@
         }
     }
 
-    function FindSum() {
-        let Jnum = -1;
-        const dbref = ref(db);
-        get(child(dbref, "prop"))
-        .then((snapshot)=>{
-            if(snapshot.exists()){
-                Jnum = snapshot.val().num;
-                window.location.reload();
-                //UpdateNum(Jnum-1)
-            }
-        })
-        .catch((error)=>{
-            alert("לא עובד אחי סליחה")
-        })
-    }
-/*
-    function UpdateNum(Jnum){
-        update(ref(db, "prop"),{
-            num: Jnum
-        })
-        .then(()=>{
-            alert("נמחק בהצלחה");
-            window.location.reload();
-        })
-        .catch((error)=>{
-            alert("לא עבד תנסה שוב");
-        });
-    }
-*/
-
     function RemoveData(){
         remove(ref(db, "jokes/"+ selectedjoke))
         .then(()=>{
-            FindSum()
+            alert("אוקי נמחק")
+            window.location.reload();
         })
         .catch((error)=>{
             alert("לא עבד אחי סליחה");
@@ -180,11 +151,9 @@
 
         if(Wlist != null) // if has data
         {
-            console.debug(Wlist)
             Wlist.forEach(Wjoke => {
-                
+                if (Wlist.indexOf(Wjoke)!=0){
                 let newjoke = document.createElement("div");
-                newjoke.href = 'jokes.html?id=' + 1;
                 newjoke.style ="color: #000000; text-decoration: none;"
                 newjoke.classList.add('item');
                 newjoke.innerHTML = 
@@ -193,12 +162,14 @@
                     <div class="card-body"> 
                         <h2 class="card-title" >${Wjoke.title} </h2>
                         <p class="card-body">${Wjoke.body}</p>
-                        <button onclick="sayHi()">מחק</button>
-                        <button onclick="saveWjoke()">שמור</button>
+                        <button onclick="module.delWjoke(${Wlist.indexOf(Wjoke)})">מחק</button>
+                        <button onclick="module.savWjoke(${Wlist.indexOf(Wjoke)})">שמור</button>
                     </div>
                 </div>
                 `;
                 listProductHTML.appendChild(newjoke);
+
+                }
             });
         }
     } 
@@ -206,19 +177,28 @@
     acceswaitlist()
 
 
-    function delnow(){
-        alert("ok..");
+    function delWjoke(wid){
+        remove(ref(db, "waitlist/"+ wid))
+        .then(()=>{
+            window.location.reload();
+        })
+        .catch((error)=>{
+            alert("לא עבד אחי סליחה");
+        });
     }
 
-    module.delnow = delnow
+
+    function savWjoke(wid){
+        alert("sav_"+wid)
+    }
+
+    module.delWjoke = delWjoke;
+    module.savWjoke = savWjoke;
 
 </script>
 
 <script>
 
-    function deleteWjoke(){
-        delnow()
-    }
     const module = {};
 
 

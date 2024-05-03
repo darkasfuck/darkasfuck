@@ -63,23 +63,9 @@
                         const db = getDatabase();                
                 
                         var insertBtn = document.querySelector("#btn");
-
-                        function UpdateNum(Jnum){
-                            update(ref(db, "prop"),{
-                                num: Jnum
-                            })
-                            .then(()=>{
-                                alert("הכל בסדר אחי");
-                                window.location.href = "index.html";
-                            })
-                            .catch((error)=>{
-                                alert("לא עבד תנסה שוב");
-                            });
-                        }
-
                 
                         function InsertD(bod, tit, dat, num) {
-                            set(ref(db, "waitlist/"+ 0),{
+                            set(ref(db, "waitlist/"+ num),{
                                 body: bod,
                                 title: tit,
                                 date: dat,
@@ -87,7 +73,8 @@
                                 ranking: 0
                             })
                             .then(()=>{
-                                UpdateNum(num);
+                                alert("הכל בסדר אחי");
+                                window.location.href = "index.html";
                             })
                             .catch((error)=>{
                                 alert(error);
@@ -95,13 +82,13 @@
                         }
 
                         function FindSum(bod, tit, dat) {
-                            let Jnum = -1;
+                            let Jnum = null;
                             const dbref = ref(db);
-                            get(child(dbref, "prop"))
+                            get(child(dbref, "waitlist"))
                             .then((snapshot)=>{
                                 if(snapshot.exists()){
-                                    Jnum = snapshot.val().num;
-                                    InsertD(bod, tit, dat, Jnum+1)
+                                    Jnum = snapshot.val();
+                                    InsertD(bod, tit, dat, Jnum.length)
                                 }
                             })
                             .catch((error)=>{
