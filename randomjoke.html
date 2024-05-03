@@ -36,14 +36,30 @@ function callrandomjoke(){
     .then((snapshot)=>{
         if(snapshot.exists()){
             Jnum = snapshot.val().num;
-            var max = parseInt(Jnum)+1;
-            const newid = Math.floor(Math.random() * (max))
-            location.href= 'jokes.html?id=' + newid;
+            checkex(Jnum);
         }
     })
     .catch((error)=>{
         alert("לא עובד אחי סליחה")
     })
+}
+
+function checkex(Jnum){
+    var max=parseInt(Jnum)+1;
+    var newid = Math.floor(Math.random() * (max));
+        const dbref = ref(db);
+        get(child(dbref, "jokes/" + newid))
+        .then((snapshot)=>{
+            if(snapshot.exists()){
+                location.href= 'jokes.html?id=' + newid;
+            }
+            else{
+                checkex(Jnum)
+            }
+        })
+        .catch((error)=>{
+            alert("לא עובד אחי סליחה")
+        })
 }
 
 callrandomjoke();

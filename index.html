@@ -49,7 +49,7 @@
                         <div class="card-header">חפש</div>
                         <div class="card-body">
                             <div class="input-group">
-                                <input class="form-control" type="text" placeholder="מה אתה מחפש אחי" aria-label="מה אתה מחפש אחי" aria-describedby="button-search" />
+                                <input class="form-control" type="text" placeholder="מה אתה מחפש אחי" aria-label="מה אתה מחפש אחי" aria-describedby="button-search" id="Searchtext" />
                                 <button class="btn btn-primary" id="button-search" type="button">חפש</button>
                             </div>
                         </div>
@@ -107,19 +107,19 @@
                 
                         let Ljokes = null
                         
-                        function accesjokes(sort) {
+                        function accesjokes(sort,searc) {
                             const dbref = ref(db);
                             get(child(dbref, "jokes"))
                             .then((snapshot)=>{
                                 Ljokes = snapshot.val();
-                                addDataToHTML(Ljokes,sort);
+                                addDataToHTML(Ljokes,sort,searc);
                             })
                             .catch((error)=>{
                                 alert("לא עובד אחי סליחה")
                             })
                         }
 
-                        function addDataToHTML(Ljokes,sort){
+                        function addDataToHTML(Ljokes,sort,searc){
                          // remove datas default from HTML
                         let listProductHTML = document.querySelector('.listProduct');
                         // add new datas
@@ -139,36 +139,35 @@
                             else if(sort == "Drating"){
                                 sortedArray.sort((a, b) => b.ranking - a.ranking);
                             }
-
+                            console.debug(Ljokes)
                             sortedArray.forEach(jokes => {
-
-                                //alert(jokes.title)
-                                let newjoke = document.createElement("a");
-                                newjoke.href = 'jokes.html?id=' + Ljokes.indexOf(jokes);
-                                newjoke.style ="color: #000000; text-decoration: none;"
-                                newjoke.classList.add('item');
-                                newjoke.innerHTML = 
-                                `
-                                <div class="card mb-4">
-                                    <div class="card-body"> 
-                                        <h2 class="card-title" >${jokes.title} </h2>
-                                        <h5 class="ratingc">
-                                            <IMG SRC="assets/like.png" alt="like" width="20" height="20">
-                                            ${jokes.ranking}
-                                            <IMG SRC="assets/dislike.png" alt="dislike" width="20" height="20">
-                                        </h5>
-                                        </h2>
+                                if((jokes.title.includes(searc)||jokes.body.includes(searc))){
+                                    let newjoke = document.createElement("a");
+                                    newjoke.href = 'jokes.html?id=' + Ljokes.indexOf(jokes);
+                                    newjoke.style ="color: #000000; text-decoration: none;"
+                                    newjoke.classList.add('item');
+                                    newjoke.innerHTML = 
+                                    `
+                                    <div class="card mb-4">
+                                        <div class="card-body"> 
+                                            <h2 class="card-title" >${jokes.title} </h2>
+                                            <h5 class="ratingc">
+                                                <IMG SRC="assets/like.png" alt="like" width="20" height="20">
+                                                ${jokes.ranking}
+                                                <IMG SRC="assets/dislike.png" alt="dislike" width="20" height="20">
+                                            </h5>
+                                            </h2>
+                                        </div>
                                     </div>
-                                </div>
-                                `;
-                                listProductHTML.appendChild(newjoke);
-                                var ran = 0;
+                                    `;
+                                    listProductHTML.appendChild(newjoke);
+                                }
                             });
                         }
                     }   
 
 
-                        accesjokes("new");
+                        accesjokes("new","");
 
                         var insertBtn = document.querySelector("#btn");
                         insertBtn.addEventListener('click', Click);
@@ -177,9 +176,17 @@
                             var selectedValue = ddl.options[ddl.selectedIndex].value;
                             let listProductHTML = document.querySelector('.listProduct');
                             listProductHTML.innerHTML="";
-                            accesjokes(selectedValue);
+                            accesjokes(selectedValue,"");
                         }
 
+                        var insertSBtn = document.querySelector("#button-search");
+                        insertSBtn.addEventListener('click', SClick);
+                        function SClick(){
+                            var Stext = document.getElementById("Searchtext").value;
+                            let listProductHTML = document.querySelector('.listProduct');
+                            listProductHTML.innerHTML="";
+                            accesjokes("new",Stext);
+                        }
 
                     </script>
                     
