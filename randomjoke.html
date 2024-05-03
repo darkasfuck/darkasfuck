@@ -36,7 +36,6 @@ function callrandomjoke(){
     .then((snapshot)=>{
         if(snapshot.exists()){
             Jnum = snapshot.val();
-            console.log(Jnum.length)
             checkex(Jnum.length);
         }
     })

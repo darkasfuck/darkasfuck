@@ -189,8 +189,58 @@
 
 
     function savWjoke(wid){
-        alert("sav_"+wid)
+        FindJoke(wid)
     }
+
+    function InsertD(bod, tit, dat, num,Jid) {
+        set(ref(db, "jokes/"+ num),{
+        body: bod,
+        title: tit,
+        date: dat,
+        disgus: 3,
+        ranking: 0
+        })
+        .then(()=>{
+            delWjoke(Jid)
+            alert("הכל בסדר אחי");
+            window.location.reload();
+        })
+        .catch((error)=>{
+            alert(error);
+        });
+    }
+
+    function FindSum(bod, tit, dat,Jid) {
+        let Jnum = null;
+        const dbref = ref(db);
+        get(child(dbref, "jokes"))
+        .then((snapshot)=>{
+            if(snapshot.exists()){
+                Jnum = snapshot.val();
+                InsertD(bod, tit, dat, Jnum.length,Jid)
+            }
+        })
+        .catch((error)=>{
+            alert("לא עובד אחי סליחה")
+        })
+    }
+
+    function FindJoke(Jid) {
+        let Jok = null;
+        const dbref = ref(db);
+        get(child(dbref, "waitlist/"+Jid))
+        .then((snapshot)=>{
+            if(snapshot.exists()){
+                Jok = snapshot.val();
+                FindSum(Jok.body,Jok.title,Jok.date,Jid)
+            }
+        })
+        .catch((error)=>{
+            alert("לא עובד אחי סליחה")
+        })
+    }
+
+
 
     module.delWjoke = delWjoke;
     module.savWjoke = savWjoke;
@@ -198,14 +248,7 @@
 </script>
 
 <script>
-
     const module = {};
-
-
-    function saveWjoke(){
-        alert("save");
-    }
-
 </script>
 
 
